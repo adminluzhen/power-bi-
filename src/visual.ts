@@ -37,7 +37,6 @@ import { VisualFormattingSettingsModel } from "./settings";
 
 export class Visual implements IVisual {
     private target: HTMLElement;
-    private updateCount: number;
     private Title;
     private BU;
     private TOP_1;
@@ -56,7 +55,7 @@ export class Visual implements IVisual {
         this.formattingSettings = this.formattingSettingsService.populateFormattingSettingsModel(VisualFormattingSettingsModel, options.dataViews[0]);
 
         console.log('Visual update', options.dataViews[0].categorical.values);
-        if (options.dataViews[0].categorical.values.length == 4) {
+        if (options.dataViews[0].categorical.values.length == 5) {
             this.Title = options.dataViews[0].categorical.values[0].values[0]   
             this.BU = options.dataViews[0].categorical.values[1].values[0]   
             this.TOP_1 = options.dataViews[0].categorical.values[2].values[0]   
@@ -69,16 +68,60 @@ export class Visual implements IVisual {
                 if (this.BU == null) {
                     isBlack = 'none';
                 }
-
-                let html = '<div class="container" style="display: ' + isBlack + '">'+
-                                '<div class="title"><div class="icon"></div>' + this.Title + '</div>'+
-                                '<div class="subtitle">'+ this.BU +'</div>'+
-                                '<div class="team">' + this.TOP_1 + '</div>'+
-                                '<div class="team">' + this.TOP_2 + '</div>'+
-                                '<div class="team">' + this.TOP_3 + '</div>'+
-                            '</div>';
+                console.log(isBlack);
                 
-                this.target.innerHTML = html;
+
+                // const html = '<div class="container" style="display: ' + isBlack + '">'+
+                //                 '<div class="title"><div class="icon"></div>' + this.Title + '</div>'+
+                //                 '<div class="subtitle">'+ this.BU +'</div>'+
+                //                 '<div class="team">' + this.TOP_1 + '</div>'+
+                //                 '<div class="team">' + this.TOP_2 + '</div>'+
+                //                 '<div class="team">' + this.TOP_3 + '</div>'+
+                //             '</div>';
+                // this.target.innerHTML = html;
+
+                // 创建容器元素
+                const container = document.createElement('div');
+                container.className = 'container';
+                container.style.display = isBlack;
+
+                // 创建标题元素
+                const titleDiv = document.createElement('div');
+                titleDiv.className = 'title';
+                const iconDiv = document.createElement('div');
+                iconDiv.className = 'icon';
+                titleDiv.appendChild(iconDiv);
+                titleDiv.appendChild(document.createTextNode(this.Title));
+
+                // 创建副标题元素
+                const subtitleDiv = document.createElement('div');
+                subtitleDiv.className = 'subtitle';
+                subtitleDiv.textContent = this.BU;
+
+                // 创建团队元素
+                const teamDiv1 = document.createElement('div');
+                teamDiv1.className = 'team';
+                teamDiv1.textContent = this.TOP_1;
+
+                const teamDiv2 = document.createElement('div');
+                teamDiv2.className = 'team';
+                teamDiv2.textContent = this.TOP_2;
+
+                const teamDiv3 = document.createElement('div');
+                teamDiv3.className = 'team';
+                teamDiv3.textContent = this.TOP_3;
+
+                // 将所有子元素添加到容器中
+                container.appendChild(titleDiv);
+                container.appendChild(subtitleDiv);
+                container.appendChild(teamDiv1);
+                container.appendChild(teamDiv2);
+                container.appendChild(teamDiv3);
+
+                // 将容器元素添加到目标元素中
+                this.target.replaceChildren(container);
+
+
             }          
         }
     }
